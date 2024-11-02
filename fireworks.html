@@ -1,0 +1,426 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fireworks for you</title>
+    <style>
+        :root {
+            --glow-color: hsl(186 100% 69%);
+        }
+
+        body {
+            margin: 0;
+            background: #020202;
+            cursor: crosshair;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            display: block
+        }
+
+        h1 {
+            position: absolute;
+            top: 36%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-family: "Source Sans Pro";
+            font-size: 5em;
+            font-weight: 900;
+            -webkit-user-select: none;
+            user-select: none;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        .glowing-btn {
+            position: absolute;
+            bottom: 100px;
+            color: var(--glow-color);
+            cursor: pointer;
+            padding: 0.35em 1em;
+            border: 0.15em solid var(--glow-color);
+            border-radius: 0.45em;
+            background: none;
+            perspective: 2em;
+            font-family: "Raleway", sans-serif;
+            font-size: 2em;
+            font-weight: 900;
+            letter-spacing: 1em;
+
+            -webkit-box-shadow: inset 0px 0px 0.5em 0px var(--glow-color),
+                0px 0px 0.5em 0px var(--glow-color);
+            -moz-box-shadow: inset 0px 0px 0.5em 0px var(--glow-color),
+                0px 0px 0.5em 0px var(--glow-color);
+            box-shadow: inset 0px 0px 0.5em 0px var(--glow-color),
+                0px 0px 0.5em 0px var(--glow-color);
+            animation: border-flicker 2s linear infinite;
+        }
+
+        .glowing-txt {
+            float: left;
+            margin-right: -0.8em;
+            -webkit-text-shadow: 0 0 0.125em hsl(0 0% 100% / 0.3),
+                0 0 0.45em var(--glow-color);
+            -moz-text-shadow: 0 0 0.125em hsl(0 0% 100% / 0.3),
+                0 0 0.45em var(--glow-color);
+            text-shadow: 0 0 0.125em hsl(0 0% 100% / 0.3), 0 0 0.45em var(--glow-color);
+            animation: text-flicker 3s linear infinite;
+        }
+
+        .faulty-letter {
+            opacity: 0.5;
+            animation: faulty-flicker 2s linear infinite;
+        }
+
+        .glowing-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            opacity: 0.7;
+            filter: blur(1em);
+            transform: translateY(120%) rotateX(95deg) scale(1, 0.35);
+            background: var(--glow-color);
+            pointer-events: none;
+        }
+
+        .glowing-btn::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+            z-index: -1;
+            background-color: var(--glow-color);
+            box-shadow: 0 0 2em 0.2em var(--glow-color);
+            transition: opacity 100ms linear;
+        }
+
+        .glowing-btn:hover {
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: none;
+            animation: none;
+        }
+
+        .glowing-btn:hover .glowing-txt {
+            animation: none;
+        }
+
+        .glowing-btn:hover .faulty-letter {
+            animation: none;
+            text-shadow: none;
+            opacity: 1;
+        }
+
+        .glowing-btn:hover:before {
+            filter: blur(1.5em);
+            opacity: 1;
+        }
+
+        .glowing-btn:hover:after {
+            opacity: 1;
+        }
+
+        @keyframes faulty-flicker {
+            0% {
+                opacity: 0.1;
+            }
+
+            2% {
+                opacity: 0.1;
+            }
+
+            4% {
+                opacity: 0.5;
+            }
+
+            19% {
+                opacity: 0.5;
+            }
+
+            21% {
+                opacity: 0.1;
+            }
+
+            23% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 0.5;
+            }
+
+            83% {
+                opacity: 0.4;
+            }
+
+            87% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes text-flicker {
+            0% {
+                opacity: 0.1;
+            }
+
+            2% {
+                opacity: 1;
+            }
+
+            8% {
+                opacity: 0.1;
+            }
+
+            9% {
+                opacity: 1;
+            }
+
+            12% {
+                opacity: 0.1;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            25% {
+                opacity: 0.3;
+            }
+
+            30% {
+                opacity: 1;
+            }
+
+            70% {
+                opacity: 0.7;
+            }
+
+            72% {
+                opacity: 0.2;
+            }
+
+            77% {
+                opacity: 0.9;
+            }
+
+            100% {
+                opacity: 0.9;
+            }
+        }
+
+        @keyframes border-flicker {
+            0% {
+                opacity: 0.1;
+            }
+
+            2% {
+                opacity: 1;
+            }
+
+            4% {
+                opacity: 0.1;
+            }
+
+            8% {
+                opacity: 1;
+            }
+
+            70% {
+                opacity: 0.7;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @media only screen and (max-width: 600px) {
+            .glowing-btn {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Happy Birthday Kesayangan Aku ke 18th <br> 💐 Nabilla 💖</h1>
+    <canvas id="birthday"></canvas>
+
+
+
+    <button onclick="playAudio()" class='glowing-btn'><span class='glowing-txt'>P<span
+                class='faulty-letter'>L</span>AY</span></button>
+
+    <audio loop id="myAudio">
+        <source src="Ruth B. - Dandelions edited.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        function playAudio() {
+            const audio = document.getElementById("myAudio");
+            audio.play();
+
+            // Initialize fireworks animation
+            initFireworks();
+        }
+
+        // Helper functions and fireworks code
+        const PI2 = Math.PI * 2;
+        const random = (min, max) => Math.random() * (max - min + 1) + min | 0;
+        const timestamp = _ => new Date().getTime();
+
+        let canvas = document.getElementById('birthday');
+        let ctx = canvas.getContext('2d');
+        let birthday;
+
+        function initFireworks() {
+            birthday = new Birthday();
+            window.onresize = () => birthday.resize();
+            document.onclick = evt => birthday.onClick(evt);
+            document.ontouchstart = evt => birthday.onClick(evt);
+
+            let then = timestamp();
+            (function loop() {
+                requestAnimationFrame(loop);
+
+                let now = timestamp();
+                let delta = now - then;
+                then = now;
+
+                birthday.update(delta / 1000);
+            })();
+        }
+
+        class Birthday {
+            constructor() {
+                this.resize();
+                this.fireworks = [];
+                this.counter = 0;
+            }
+
+            resize() {
+                this.width = canvas.width = window.innerWidth;
+                let center = this.width / 2 | 0;
+                this.spawnA = center - center / 4 | 0;
+                this.spawnB = center + center / 4 | 0;
+                this.height = canvas.height = window.innerHeight;
+                this.spawnC = this.height * .1;
+                this.spawnD = this.height * .5;
+            }
+
+            onClick(evt) {
+                let x = evt.clientX || evt.touches && evt.touches[0].pageX;
+                let y = evt.clientY || evt.touches && evt.touches[0].pageY;
+
+                let count = random(3, 5);
+                for (let i = 0; i < count; i++) this.fireworks.push(new Firework(
+                    random(this.spawnA, this.spawnB),
+                    this.height,
+                    x,
+                    y,
+                    random(0, 260),
+                    random(30, 110)
+                ));
+
+                this.counter = -1;
+            }
+
+            update(delta) {
+                ctx.globalCompositeOperation = 'hard-light';
+                ctx.fillStyle = `rgba(20,20,20,${7 * delta})`;
+                ctx.fillRect(0, 0, this.width, this.height);
+
+                ctx.globalCompositeOperation = 'lighter';
+                for (let firework of this.fireworks) firework.update(delta);
+
+                this.counter += delta * 3;
+                if (this.counter >= 1) {
+                    this.fireworks.push(new Firework(
+                        random(this.spawnA, this.spawnB),
+                        this.height,
+                        random(0, this.width),
+                        random(this.spawnC, this.spawnD),
+                        random(0, 360),
+                        random(30, 110)
+                    ));
+                    this.counter = 0;
+                }
+
+                if (this.fireworks.length > 1000) this.fireworks = this.fireworks.filter(firework => !firework
+                .dead);
+            }
+        }
+
+        class Firework {
+            constructor(x, y, targetX, targetY, shade, offsprings) {
+                this.dead = false;
+                this.offsprings = offsprings;
+                this.x = x;
+                this.y = y;
+                this.targetX = targetX;
+                this.targetY = targetY;
+                this.shade = shade;
+                this.history = [];
+            }
+
+            update(delta) {
+                if (this.dead) return;
+
+                let xDiff = this.targetX - this.x;
+                let yDiff = this.targetY - this.y;
+                if (Math.abs(xDiff) > 3 || Math.abs(yDiff) > 3) {
+                    this.x += xDiff * 2 * delta;
+                    this.y += yDiff * 2 * delta;
+                    this.history.push({
+                        x: this.x,
+                        y: this.y
+                    });
+                    if (this.history.length > 20) this.history.shift();
+                } else {
+                    if (this.offsprings && !this.madeChilds) {
+                        let babies = this.offsprings / 2;
+                        for (let i = 0; i < babies; i++) {
+                            let targetX = this.x + this.offsprings * Math.cos(PI2 * i / babies) | 0;
+                            let targetY = this.y + this.offsprings * Math.sin(PI2 * i / babies) | 0;
+                            birthday.fireworks.push(new Firework(this.x, this.y, targetX, targetY, this.shade, 0));
+                        }
+                    }
+                    this.madeChilds = true;
+                    this.history.shift();
+                }
+
+                if (this.history.length === 0) this.dead = true;
+                else if (this.offsprings) {
+                    for (let i = 0; this.history.length > i; i++) {
+                        let point = this.history[i];
+                        ctx.beginPath();
+                        ctx.fillStyle = 'hsl(' + this.shade + ',100%,' + i + '%)';
+                        ctx.arc(point.x, point.y, 1, 0, PI2, false);
+                        ctx.fill();
+                    }
+                } else {
+                    ctx.beginPath();
+                    ctx.fillStyle = 'hsl(' + this.shade + ',100%,50%)';
+                    ctx.arc(this.x, this.y, 1, 0, PI2, false);
+                    ctx.fill();
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
